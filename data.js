@@ -1,10 +1,10 @@
 export const noteItems =[
     {
-        title : 'Notatka 1',
+        title : 'Przykładowa notatka',
         key : 1,
-        content : 'Zrobić pierwszą rzecz',
+        content : 'Przykładowa rzecz do zrobienia',
         checked: 0
-    },
+    } /*,
     {
         title : 'Notatka 2',
         key : 2,
@@ -16,5 +16,5 @@ export const noteItems =[
         key : 3,
         content : 'Zrobić trzecią rzecz',
         checked: 0
-    }    
+    }   */ 
 ]
