@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import { View, StyleSheet, FlatList, Text, CheckBox } from 'react-native';
 import { Constants } from 'expo';
+import { noteItems } from './data.js'
 
 export default class App extends Component {
   state = {
-    items: new Array(5).fill(0).map((a, i) => i).map(i => ({
-      title: `Notatka ${i}`,
-      key: i,
-      content: `Kontent notatki ${i}. Treść notatki jest taka jaka jest. Może być nawet trochę dłuższa.`,
-    })),
+    items: noteItems,
   };
 
   render() {
     return (
-      <View style={styles.container}>
-        <FlatList data={this.state.items} renderItem={this.renderItem} />
+      <View style = {styles.container}>
+        <Text style = {styles.mainTitle}> Moja lista notatek </Text>
+        <FlatList data = {this.state.items} renderItem = {this.renderItem} keyExtractor = { item => item.key.toString() } />
       </View>
     );
   }
@@ -23,6 +21,11 @@ export default class App extends Component {
     <View style={styles.item}>
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.content}>{item.content}</Text>
+      <CheckBox
+          title="Done"
+          checked={item.checked}
+          onPress={() => this.setState({ checked: !item.checked })}
+        />
     </View>
   );
 }
@@ -31,20 +34,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     padding: 0,
     margin: 0,
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ffffe6',
+    backgroundColor: '#ffffe6'
+
   },
   item: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 5
   },
   title: {
     fontWeight: 'bold',
     marginVertical: 5,
+    fontSize: 22
   },
   content: {
     marginBottom: 10,
+    fontSize: 20
   },
+  mainTitle: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'center',
+   
+    margin: 0,
+    marginBottom: 30,
+    paddingTop: Constants.statusBarHeight
+  }
 });
