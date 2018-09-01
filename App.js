@@ -4,7 +4,7 @@ import { Constants } from 'expo';
 
 export default class App extends Component {
   state = {
-    items: new Array(1).fill(0).map((a, i) => i).map(i => ({
+    items: new Array(5).fill(0).map((a, i) => i).map(i => ({
       title: `Notatka ${i}`,
       key: i,
       content: `Kontent notatki ${i}. Treść notatki jest taka jaka jest. Może być nawet trochę dłuższa.`,
