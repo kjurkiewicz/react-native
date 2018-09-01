@@ -12,20 +12,34 @@ class HomeScreen extends React.Component {
     title: 'Moja lista notatek',
   };
 
+  onAdd = newitem => {
+    this.setState(state => ({
+      items: [       
+         ...state.items,
+         {
+           title: newitem.newtitle,
+           content: newitem.newnote,
+           key: state.count + 1,
+           checked: 0
+         }
+       
+       ]
+     }))
+  }
+
   state = {
     items: noteItems,
     actions: [],
     count: 0
   };
 
+
   render() {
     return (
       <View style = {styles.container}>
-        {/*<Text style = {styles.mainTitle}> Moja lista notatek </Text>
-         <Text > Count: {this.state.count} </Text> */}
         <FlatList data = {this.state.items} renderItem = {this.renderItem} keyExtractor = { item => item.key.toString() } />
         <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Item', this.state.count)}
+            onPress={() => this.props.navigation.navigate('Item', {count: this.state.count, onAdd: this.onAdd})}
             style={styles.touchable}>
             <Text>Dodaj nową notatkę</Text>
         </TouchableOpacity>
@@ -45,6 +59,8 @@ class HomeScreen extends React.Component {
     </View>
   );
 
+  increaseCounter = () => this.setState(({ count }) => ({ count: count + 1 }));
+
 }
   
 class ItemScreen extends React.Component {
@@ -55,10 +71,9 @@ class ItemScreen extends React.Component {
   state = {
     newitem: {
       newtitle: 'Tytuł notatki',
-      newnote: 'Co chcesz zrobić?',
-      key:  this.props.navigation.getParam('count'),
-      checked: 0
-    }
+      newnote: 'Co chcesz zrobić?'
+    },
+    actions: []
   };
 
   render() {
@@ -93,7 +108,10 @@ class ItemScreen extends React.Component {
   }
   titleChanged = text =>
   this.setState(state => ({
-    newtitle: text,
+    newitem: {
+      newtitle: text,
+      newnote: state.newitem.newnote
+    },
     actions: state.actions.concat({
       newtitle: text
     }),
@@ -101,24 +119,27 @@ class ItemScreen extends React.Component {
 
   noteChanged = text =>
   this.setState(state => ({
-    newnote: text,
+    newitem: {
+      newtitle: state.newitem.newtitle,
+      newnote: text
+    },
     actions: state.actions.concat({
       newnote: text
     }),
   }));
 
-  increaseCounter = () => this.setState(({ count }) => ({ count: count + 1 }));
 
-  saveNote = () => (
-   // this.increaseCounter(),
+  saveNote = () => {
     this.setState(state => ({
-      newtitle: 'Tytuł notatki',
-      newnote: 'Co chcesz zrobić?',
-      key: state.key + 1 
+      newitem: {
+        newtitle: state.newitem.newtitle,
+        newnote: state.newitem.newnote
+    }}), () => {
+
+      this.props.navigation.getParam('onAdd')(this.state.newitem)
+      this.props.navigation.navigate('Home')
     })
-    ),
-    this.props.navigation.navigate('Home', this.state.newitem)
-  ) 
+  }
 }
   
 
